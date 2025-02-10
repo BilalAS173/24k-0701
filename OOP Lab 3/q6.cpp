@@ -19,8 +19,8 @@ public:
             }
         }
     }
+   
     
-    // Copy constructor (deep copy)
     Matrix(const Matrix &other) : rows(other.rows), cols(other.cols) {
         mat = new int*[rows];
         for (int i = 0; i < rows; i++) {
@@ -31,7 +31,7 @@ public:
         }
     }
     
-    // Copy assignment operator (deep copy)
+
     Matrix& operator=(const Matrix &other) {
         if (this != &other) { 
             for (int i = 0; i < rows; i++) {
@@ -99,7 +99,7 @@ public:
     
     Matrix multiply(const Matrix &other) const {
         if (cols != other.rows) {
-            cout << "Matrices cannot be multiplied due to mismatched dimensions." << endl;
+            cout << "Matrices cannot be multiplied as dimensions do not match." << endl;
             return Matrix(0, 0);
         }
         Matrix result(rows, other.cols);
