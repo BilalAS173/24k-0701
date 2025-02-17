@@ -5,23 +5,20 @@ class matrix {
 private:
     int rows;
     int columns;
-    double** value;  // Use double instead of int
+    double** value;  
 
 public:
-    // Default constructor
     matrix() : rows(0), columns(0), value(nullptr) {}
 
-    // Parameterized constructor
     matrix(int rows, int columns) {
         this->rows = rows;
         this->columns = columns;
         value = new double*[rows];  
         for (int i = 0; i < rows; i++) {
-            value[i] = new double[columns]();  // Initialize to 0
+            value[i] = new double[columns](); 
         }
     }
 
-    // Copy constructor (Deep Copy)
     matrix(const matrix& other) {
         rows = other.rows;
         columns = other.columns;
@@ -34,17 +31,15 @@ public:
         }
     }
 
-    // Move constructor
     matrix(matrix&& other) noexcept {
         rows = other.rows;
         columns = other.columns;
         value = other.value; 
-        other.value = nullptr;  // Avoid double deletion
+        other.value = nullptr;  
         other.rows = 0;
         other.columns = 0;
     }
 
-    // Destructor
     ~matrix() {
         if (value) {
             for (int i = 0; i < rows; i++) {
@@ -54,7 +49,6 @@ public:
         }
     }
 
-    // Getters
     int getrows() const {
         return rows;
     }
@@ -62,12 +56,10 @@ public:
         return columns;
     }
 
-    // Access element
     double& at(int r, int c) {
         return value[r][c];  
     }
 
-    // Fill the matrix
     void fill(double fillValue) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -76,7 +68,6 @@ public:
         }
     }
 
-    // Transpose function
     matrix transpose() {
         matrix transposed(columns, rows);  
         for (int i = 0; i < rows; i++) {
@@ -84,8 +75,6 @@ public:
                 transposed.value[j][i] = value[i][j];  
             }
         }
-
-        // Printing the transposed matrix
         cout << "Transposed Matrix: " << endl;
         for (int i = 0; i < transposed.rows; i++) {
             for (int j = 0; j < transposed.columns; j++) {
@@ -98,7 +87,6 @@ public:
     }
 };
 
-// Main function
 int main() {
     int x, y;
     cout << "Enter the number of rows: ";
@@ -106,17 +94,13 @@ int main() {
     cout << "Enter the number of columns: ";
     cin >> y;
 
-    // Creating a matrix object
     matrix obj1(x, y);
-    obj1.fill(4.00);
+    obj1.fill(5.00);
 
-    // Copy constructor
     matrix obj2(obj1);
 
-    // Move constructor
     matrix obj3(move(obj2));
 
-    // Transpose
     matrix transposed = obj1.transpose();
 
     return 0;
