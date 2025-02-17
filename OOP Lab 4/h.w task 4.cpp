@@ -1,38 +1,107 @@
 #include <iostream>
 #include <string>
+using namespace std;
 
 class Book {
 private:
-    std::string title;
-    std::string author;
+    string author;
+    string title;
     double price;
-    std::string publisher;
+    string publisher;
     int stock;
 
 public:
-    // Constructor
-    Book(std::string t, std::string a, double p, std::string pub, int s)
-        : title(t), author(a), price(p), publisher(pub), stock(s) {}
-
-    // Function to check availability and process order
-    void processOrder(int copies) {
-        if (copies <= stock) {
-            std::cout << "Total Cost: " << (copies * price) << std::endl;
-            stock -= copies;
-        } else {
-            std::cout << "Required copies not in stock.\n";
-        }
+ 
+    Book(string authorName, string bookTitle, double bookPrice, string bookPublisher, int bookStock) {
+        author = authorName;
+        title = bookTitle;
+        price = bookPrice;
+        publisher = bookPublisher;
+        stock = bookStock;
     }
 
-    // Function to check availability
-    bool isAvailable(std::string searchTitle, std::string searchAuthor) const {
-        return (title == searchTitle && author == searchAuthor);
+    string getAuthor() const { 
+        return author; 
+    }
+    string getTitle() const { 
+        return title;
+     }
+    double getPrice() const { 
+        return price; 
+    }
+    string getPublisher() const {
+        return publisher; 
+    }
+    int getStock() const { 
+        return stock;
+    }
+    bool isAvailable(int requestedCopies) const {
+        return stock >= requestedCopies;
+    }
+    void sellBooks(int soldCopies) {
+        stock -= soldCopies;
     }
 
-    // Function to display book details
-    void display() const {
-        std::cout << "Title: " << title << "\nAuthor: " << author
-                  << "\nPrice: " << price << "\nPublisher: " << publisher
-                  << "\nStock: " << stock << std::endl;
+    void displayDetails() const {
+        cout << "Author: " << author << "\nTitle: " << title << "\nPrice: $" << price
+             << "\nPublisher: " << publisher << "\nStock: " << stock << endl;
     }
 };
+
+class BookShop {
+private:
+    Book* inventory[100]; 
+    int totalBooks; 
+
+public:
+    // Constructor
+    BookShop() {
+        totalBooks = 0;
+    }
+
+    void addBook(string author, string title, double price, string publisher, int stock) {
+        inventory[totalBooks] = new Book(author, title, price, publisher, stock);
+        totalBooks++;
+    }
+
+    void searchBook(string title, string author) {
+        bool found = false;
+        for (int i = 0; i < totalBooks; i++) {
+            if (inventory[i]->getTitle() == title && inventory[i]->getAuthor() == author) {
+                found = true;
+                inventory[i]->displayDetails();
+                cout << "Enter the number of copies you want to buy: ";
+                int copies;
+                cin >> copies;
+                if (inventory[i]->isAvailable(copies)) {
+                    inventory[i]->sellBooks(copies);
+                    cout << "Total cost for " << copies << " copies: $" << inventory[i]->getPrice() * copies << endl;
+                } else {
+                    cout << "Required copies not in stock" << endl;
+                }
+            }
+        }
+
+        if (!found) {
+            cout << "The book is not available in the inventory." << endl;
+        }
+    }
+};
+
+int main() {
+    
+    BookShop shop;
+
+    shop.addBook("J.K. Rowling", "Harry Potter", 49.99, "Bloomsbury", 50);
+    shop.addBook("George Orwell", "1984", 15.79, "The Silent Patient", 60);
+
+    string title, author;
+    cout << "Enter book title: ";
+    cin.ignore(); 
+    getline(cin, title);
+    cout << "Enter book author: ";
+    getline(cin, author);
+    shop.searchBook(title, author);
+
+    return 0;
+}
