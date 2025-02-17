@@ -1,75 +1,122 @@
 #include <iostream>
 using namespace std;
+
 class DynamicArray {
 private:
-    int* data;
-    int length;
+    int* arr;
+    int size;
 
 public:
-    // Default constructor
-    DynamicArray() : data(nullptr), length(0) {}
-
-    // Parameterized constructor
-    DynamicArray(int n) : length(n) {
-        data = new int[n]();
+    DynamicArray() {
+        arr = nullptr;
+        size = 0;
     }
 
-    // Copy constructor (Deep Copy)
-    DynamicArray(const DynamicArray& other) : length(other.length) {
-        data = new int[length];
-        for (int i = 0; i < length; ++i)
-            data[i] = other.data[i];
+    DynamicArray(int n) {
+        size = n;
+        arr = new int[size]();
     }
 
-    // Move constructor
-    DynamicArray(DynamicArray&& other) noexcept : data(other.data), length(other.length) {
-        other.data = nullptr;
-        other.length = 0;
-    }
-
-    // Copy assignment operator (Deep Copy)
-    DynamicArray& operator=(const DynamicArray& other) {
-        if (this != &other) {
-            delete[] data;
-            length = other.length;
-            data = new int[length];
-            for (int i = 0; i < length; ++i)
-                data[i] = other.data[i];
+    DynamicArray(const DynamicArray& other) {
+        size = other.size;
+        arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = other.arr[i];
         }
-        return *this;
     }
 
-    // Move assignment operator
-    DynamicArray& operator=(DynamicArray&& other) noexcept {
-        if (this != &other) {
-            delete[] data;
-            data = other.data;
-            length = other.length;
-            other.data = nullptr;
-            other.length = 0;
-        }
-        return *this;
+    DynamicArray(DynamicArray&& other) noexcept {
+        size = other.size;
+        arr = other.arr;
+        other.arr = nullptr;
+        other.size = 0;
     }
 
-    // Destructor
     ~DynamicArray() {
-        delete[] data;
+        delete[] arr;
     }
 
-    // Get size of the array
-    int size() const { return length; }
+    DynamicArray& operator=(const DynamicArray& other) {
+        if (this == &other) return *this;
+        delete[] arr;
+        size = other.size;
+        arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = other.arr[i];
+        }
+        return *this;
+    }
 
-    // Access elements
-    int& at(int index) { return data[index]; }
-    const int& at(int index) const { return data[index]; } // Const version for read-only access
+    DynamicArray& operator=(DynamicArray&& other) noexcept {
+        if (this == &other) return *this;
+        delete[] arr;
+        size = other.size;
+        arr = other.arr;
+        other.arr = nullptr;
+        other.size = 0;
+        return *this;
+    }
 
-    // Resize the array
-    void resize(int newSize) {
-        int* newData = new int[newSize]();
-        for (int i = 0; i < (newSize < length ? newSize : length); ++i)
-            newData[i] = data[i];
-        delete[] data;
-        data = newData;
-        length = newSize;
+    void resize(int newsize) {
+        if (newsize <= 0) {
+            delete[] arr;
+            arr = nullptr;
+            size = 0;
+        } else {
+            int* newarr = new int[newsize]();
+            for (int i = 0; i < (newsize < size ? newsize : size); i++) {
+                newarr[i] = arr[i];
+            }
+            delete[] arr;
+            arr = newarr;
+            size = newsize;
+        }
+    }
+
+    int getSize() const {
+        return size;
+    }
+
+    int& operator[](int index) {
+        return arr[index];
+    }
+
+    const int& operator[](int index) const {
+        return arr[index];
     }
 };
+
+int main() {
+    DynamicArray arr(5);
+    for (int i = 0; i < arr.getSize(); i++) {
+        arr[i] = i * 10;
+    }
+
+    cout << "Array contents are: ";
+    for (int i = 0; i < arr.getSize(); i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    arr.resize(7);
+    cout << "Array after resizing is: ";
+    for (int i = 0; i < arr.getSize(); i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    DynamicArray arrCopy = arr;
+    cout << "Copied array is: ";
+    for (int i = 0; i < arrCopy.getSize(); i++) {
+        cout << arrCopy[i] << " ";
+    }
+    cout << endl;
+
+    DynamicArray movedArr = std::move(arr);
+    cout << "Moved array is: ";
+    for (int i = 0; i < movedArr.getSize(); i++) {
+        cout << movedArr[i] << " ";
+    }
+    cout << endl;
+
+}
