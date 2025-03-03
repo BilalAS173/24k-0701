@@ -1,8 +1,7 @@
 #include <iostream>
-#include <thread> // Needed for sleep_for
-
+#include <thread> 
+#include <chrono>
 using namespace std;
-
 class Blend {
 public:
     void blendJuice() {
@@ -14,12 +13,11 @@ public:
         cout << "Juice blended!\n";
     }
 };
-
 class Grind {
 public:
     void grindJuice() {
         cout << "Grinding juice...\n";
-        std::this_thread::sleep_for(std::chrono::seconds(5)); // Simulate grinding process
+        std::this_thread::sleep_for(std::chrono::seconds(5)); 
         cout << "Juice ground!\n";
     }
 };
@@ -36,7 +34,6 @@ public:
         cout << "Juice is ready to serve!\n";
     }
 };
-
 int main() {
     JuiceMaker myJuice;
     myJuice.makeJuice();
