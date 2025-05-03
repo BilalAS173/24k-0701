@@ -92,7 +92,6 @@ public:
 };
 
 int main() {
-    // Create and initialize two matrices
     Matrix<int> A(2, 3);
     A.at(0, 0) = 1; A.at(0, 1) = 2; A.at(0, 2) = 3;
     A.at(1, 0) = 4; A.at(1, 1) = 5; A.at(1, 2) = 6;
@@ -107,37 +106,29 @@ int main() {
     A.print();
     cout << "\nMatrix B (3x2):\n";
     B.print();
-
-    // Demonstrate multiplication
     cout << "\nMatrix Multiplication (A * B):\n";
     Matrix<int> C = A * B;
     C.print();
-
-    // Create another matrix for addition demo
     Matrix<int> D(2, 3);
     D.at(0, 0) = 6; D.at(0, 1) = 5; D.at(0, 2) = 4;
     D.at(1, 0) = 3; D.at(1, 1) = 2; D.at(1, 2) = 1;
 
     cout << "\nMatrix D (2x3):\n";
     D.print();
-
-    // Demonstrate addition
     cout << "\nMatrix Addition (A + D):\n";
     Matrix<int> E = A + D;
     E.print();
-
-    // Demonstrate error handling
     cout << "\nDemonstrating error handling:\n";
     try {
         cout << "Attempting invalid addition (A + B):\n";
-        Matrix<int> F = A + B; // This will throw
+        Matrix<int> F = A + B; 
     } catch (const DimensionMismatchException& e) {
         cout << "Error: " << e.what() << endl;
     }
 
     try {
         cout << "\nAttempting invalid matrix access:\n";
-        A.at(10, 10) = 99; // This will throw
+        A.at(10, 10) = 99; 
     } catch (const OutOfBoundsException& e) {
         cout << "Error: " << e.what() << endl;
     }
