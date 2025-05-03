@@ -1,19 +1,15 @@
 #include <vector>
 #include <stdexcept>
 #include <iostream>
-
 using namespace std;
-
 class DimensionMismatchException : public runtime_error {
 public:
     DimensionMismatchException(const string& what) : runtime_error(what) {}
 };
-
 class OutOfBoundsException : public runtime_error {
 public:
     OutOfBoundsException(const string& what) : runtime_error(what) {}
 };
-
 template<typename T>
 class Matrix {
 private:
